@@ -17,7 +17,8 @@ class Server {
       this.key = "server.key";
       this.cert = "server.crt";
     }
-    else{
+    else
+      if (process.env.NODE_ENV == "production"){
       this.key = "/etc/ssl/server.key";
       this.cert = "/etc/ssl/server.crt";
     }
@@ -29,8 +30,8 @@ class Server {
     };
 
     this.app = express();
-    this.port = process.env.PORT || 8080; // HTTP port
-    this.httpsPort = process.env.HTTPS_PORT || 8081; // HTTPS port
+    this.port = process.env.PORT || 8025; // HTTP port
+    this.httpsPort = process.env.HTTPS_PORT || 8025; // HTTPS port
     this.sslOptions = sslOptions;
 
     this.paths = {
@@ -57,13 +58,16 @@ class Server {
     this.app.use(this.paths.auth, require("../routes/auth"));
     this.app.use(this.paths.homepage, require("../routes/homepage"));
     // Catch all requests that don't match any route
+   /*
     this.app.get("*", (req, res) => {
       res.sendFile(
         path.join(__dirname, "../../client/build/index.html")
       );
     });
   }
-/*
+  */
+  }
+  /*
   listen() {
     this.app.listen(this.port, () => {
       console.log("Server running on port: ", this.port);
